@@ -23,7 +23,7 @@ interface ChatHistoryItem {
 export class AppComponent {
   private geminiService = inject(GeminiService);
 
-  // FIX: Removed API Key signal as it should be handled by environment variables.
+  apiKey: WritableSignal<string> = signal('');
   knowledgeBase: WritableSignal<string> = signal('');
   question: WritableSignal<string> = signal('');
   generating: WritableSignal<boolean> = signal(false);
@@ -55,11 +55,11 @@ export class AppComponent {
   arrayFrom = Array.from;
 
   constructor() {
-    pdfjsLib.GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString();
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://esm.sh/pdfjs-dist@4.4.168/build/pdf.worker.mjs';
   }
 
-  // FIX: Removed API Key check from form validation logic.
   isFormInvalid = computed(() => 
+    this.apiKey().trim().length === 0 ||
     this.knowledgeBase().trim().length === 0 || 
     this.question().trim().length < 10 || 
     this.generating()
@@ -75,10 +75,10 @@ export class AppComponent {
     this.error.set(null);
 
     try {
-      // FIX: Removed API Key from service call.
       const response = await this.geminiService.generateProposal(
         this.knowledgeBase(),
         this.question(),
+        this.apiKey(),
         this.outputFormat()
       );
       
@@ -212,8 +212,11 @@ export class AppComponent {
     this.pdfToView.set(file);
   }
 
-  // FIX: Removed onApiKeyInput method.
-  
+  onApiKeyInput(event: Event): void {
+    const target = event.target as HTMLInputElement;
+    this.apiKey.set(target.value);
+  }
+
   onQuestionInput(event: Event): void {
     const target = event.target as HTMLTextAreaElement;
     this.question.set(target.value);

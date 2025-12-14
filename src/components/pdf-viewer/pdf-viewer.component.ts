@@ -10,8 +10,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as pdfjsLib from 'pdfjs-dist';
-// FIX: RenderParameters is not exported from the root of 'pdfjs-dist'. It is available from a deep import path.
-import type { PDFDocumentProxy, PageViewport, RenderParameters } from 'pdfjs-dist/types/src/display/api';
+import type { PDFDocumentProxy } from 'pdfjs-dist';
 
 @Component({
   selector: 'app-pdf-viewer',
@@ -139,14 +138,12 @@ export class PdfViewerComponent implements OnDestroy {
     canvasEl.height = viewport.height;
     canvasEl.width = viewport.width;
 
-    // FIX: Add 'canvas' property to renderContext to satisfy the type definition of RenderParameters for the installed version of pdfjs-dist.
     const renderContext = {
-      canvas: canvasEl,
       canvasContext,
       viewport,
     };
     
-    this.renderTask = page.render(renderContext as RenderParameters);
+    this.renderTask = page.render(renderContext);
     await this.renderTask.promise;
     this.renderTask = null;
   }
