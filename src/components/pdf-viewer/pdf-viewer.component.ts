@@ -10,7 +10,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import * as pdfjsLib from 'pdfjs-dist';
-import type { PDFDocumentProxy, PageViewport, RenderParameters } from 'pdfjs-dist';
+// FIX: RenderParameters is not exported from the root of 'pdfjs-dist'. It is available from a deep import path.
+import type { PDFDocumentProxy, PageViewport, RenderParameters } from 'pdfjs-dist/types/src/display/api';
 
 @Component({
   selector: 'app-pdf-viewer',
