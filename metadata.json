@@ -1,0 +1,5 @@
+{
+  "name": "RFP-Genius",
+  "description": "An AI-powered tool to generate RFP answers from your knowledge base. Paste your documents, ask a question, and receive a professionally drafted response along with suggested follow-up questions.",
+  "requestFramePermissions": []
+}
